@@ -1,3 +1,7 @@
+# Broccoli App 🥦
+
+![broccoli-react-app](https://user-images.githubusercontent.com/28638340/132312336-e79c12ce-9fbc-4b8d-ac91-72cdef0f4d35.gif)
+
 🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦🥦
 
 # Getting Started with Create React App and Typescript
