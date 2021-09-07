@@ -42,6 +42,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 node-sass was used for writing css.
 
 ## challenges 🥦
-Enzype adapter for react 17. https://www.npmjs.com/package/@wojtekmaj/enzyme-adapter-react-17
+Enzype adapter for react 17. https://www.npmjs.com/package/@wojtekmaj/enzyme-adapter-react-17 
+
 Node sass compatibility issue https://github.com/sass/node-sass/issues/3103
 
