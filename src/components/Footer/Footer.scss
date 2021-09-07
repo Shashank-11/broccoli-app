@@ -1,0 +1,8 @@
+@import "../../styles/reference";
+
+.footer {
+  background-color: $light-gray;
+  padding-top: rem-calc(24px);
+  padding-bottom: rem-calc(24px);
+  flex-shrink: 0;
+}

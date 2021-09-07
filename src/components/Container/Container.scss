@@ -1,0 +1,9 @@
+@import "../../styles/reference";
+
+.container {
+  padding-right: rem-calc(15px);
+  padding-left: rem-calc(15px);
+  margin-right: auto;
+  margin-left: auto;
+  max-width: rem-calc(1140px);
+}

@@ -1,0 +1,27 @@
+@import "../../styles/reference";
+.header {
+  background-color: $white;
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: $header-height-mobile;
+  box-shadow: 0 0 18px rgba(174, 185, 187, 0.300235);
+
+  &__container {
+    display: flex;
+    align-items: baseline;
+    font-size: rem-calc(22px);
+    font-weight: 600;
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    height: $header-height-desktop;
+  }
+
+  img {
+    width: rem-calc(50px);
+    margin: rem-calc(12px);
+  }
+}

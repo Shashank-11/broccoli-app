@@ -1,0 +1,16 @@
+@import "../styles/reference";
+
+.home-page {
+  text-align: center;
+  &__content {
+    max-width: rem-calc(600px);
+    margin: rem-calc(100px) auto;
+  }
+  h1 {
+    text-align: center;
+    font-size: rem-calc(54px);
+  }
+  &__error {
+    color: $error-text;
+  }
+}

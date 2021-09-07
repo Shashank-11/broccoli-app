@@ -1,0 +1,14 @@
+@import "../../styles/reference";
+
+.button {
+  color: $white;
+  background-color: $button-color;
+  border-color: $button-color;
+  padding: 0.75rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  letter-spacing: 0.4px;
+  border-radius: rem-calc(5px);
+  margin: rem-calc(20px) 0;
+  min-width: rem-calc(150px);
+}

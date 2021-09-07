@@ -1,0 +1,9 @@
+@import "../../styles/reference";
+
+.invite-form {
+  width: rem-calc(320px);
+  margin: auto;
+  @media (min-width: $breakpoint-md) {
+    width: rem-calc(500px);
+  }
+}

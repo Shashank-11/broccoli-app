@@ -1,0 +1,33 @@
+@import "../../styles/reference";
+
+.form-group {
+  text-align: justify;
+  margin: rem-calc(10px);
+  padding: rem-calc(5px);
+  &__label {
+    display: block;
+    margin-bottom: rem-calc(15px);
+    font-weight: 600;
+  }
+  &__input {
+    display: block;
+    width: stretch;
+    padding: 0.625rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: $body-color;
+    background-color: $white;
+    background-clip: padding-box;
+    border: 2px solid #eef0f2;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+  &__error {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 75%;
+    color: $error-text;
+  }
+}
