@@ -2,7 +2,7 @@ import * as React from "react";
 
 import FormGroup from "../../components/FormGroup/FormGroup";
 import Button from "../../components/Button/Button";
-
+import { useEnableSubmit } from "../../hooks/useEnableSubmit";
 import { checkName, isValidEmail, isValidConfirmEmail } from "../homeUtils";
 import "./InviteForm.scss";
 
@@ -29,22 +29,8 @@ const InviteForm = (props: IProps): React.ReactElement => {
     isError: null,
     value: "",
   });
-  const [enableSubmit, setEnableSubmit] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    if (
-      fullName?.isError !== null &&
-      !fullName?.isError &&
-      email?.isError !== null &&
-      !email?.isError &&
-      confirmEmail?.isError !== null &&
-      !confirmEmail?.isError
-    ) {
-      setEnableSubmit(true);
-    } else {
-      setEnableSubmit(false);
-    }
-  }, [fullName, email, confirmEmail]);
+  const { enableSubmit } = useEnableSubmit(fullName, email, confirmEmail);
 
   React.useEffect(() => {
     if (confirmEmail.value)

@@ -28,7 +28,7 @@ export class HttpClient {
         config
       );
       return result;
-    } catch (err: any) {
+    } catch (err: any | unknown) {
       throw err.response?.data?.errorMessage || err.response;
     }
   }
