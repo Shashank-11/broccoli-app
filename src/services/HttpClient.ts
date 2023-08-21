@@ -146,3 +146,141 @@ describe('HttpClient', () => {
   });
 });
 
+import { getCuratedData } from './curatedData'; // Adjust the import path
+
+describe('getCuratedData', () => {
+  it('transforms data into curated format', () => {
+    const input = [
+      {
+        date: '2023-08-18',
+        value: {
+          number: 42,
+          display_text: 'Forty-Two',
+        },
+        otherProperty: 'abc',
+      },
+      // Add more series as needed
+    ];
+
+    const expectedOutput = [
+      {
+        x: '2023-08-18',
+        y: 42,
+        display_value: 'Forty-Two',
+        otherProperty: 'abc',
+      },
+      // Add more expected transformed objects
+    ];
+
+    const curatedData = getCuratedData(input);
+
+    expect(curatedData).toEqual(expectedOutput);
+  });
+
+  it('returns an empty array for falsy input', () => {
+    const curatedData = getCuratedData(null);
+    expect(curatedData).toEqual([]);
+  });
+
+  it('returns an empty array for non-object input', () => {
+    const curatedData = getCuratedData('not an object');
+    expect(curatedData).toEqual([]);
+  });
+});
+
+describe('getCuratedData', () => {
+  it('transforms data with missing value property', () => {
+    const input = [
+      {
+        date: '2023-08-18',
+        // No value property
+        otherProperty: 'abc',
+      },
+      // Add more series as needed
+    ];
+
+    const expectedOutput = [
+      {
+        x: '2023-08-18',
+        y: undefined, // Missing value, should be undefined
+        display_value: undefined, // Missing display_text, should be undefined
+        otherProperty: 'abc',
+      },
+      // Add more expected transformed objects
+    ];
+
+    const curatedData = getCuratedData(input);
+
+    expect(curatedData).toEqual(expectedOutput);
+  });
+
+  it('transforms empty data array', () => {
+    const input = [];
+
+    const expectedOutput = [];
+
+    const curatedData = getCuratedData(input);
+
+    expect(curatedData).toEqual(expectedOutput);
+  });
+
+  it('transforms data with empty value', () => {
+    const input = [
+      {
+        date: '2023-08-18',
+        value: {
+          number: null,
+          display_text: '',
+        },
+        otherProperty: 'abc',
+      },
+      // Add more series as needed
+    ];
+
+    const expectedOutput = [
+      {
+        x: '2023-08-18',
+        y: null,
+        display_value: '',
+        otherProperty: 'abc',
+      },
+      // Add more expected transformed objects
+    ];
+
+    const curatedData = getCuratedData(input);
+
+    expect(curatedData).toEqual(expectedOutput);
+  });
+
+  it('handles mixed data types', () => {
+    const input = [
+      {
+        date: '2023-08-18',
+        value: {
+          number: 42,
+          display_text: 'Forty-Two',
+        },
+        otherProperty: 'abc',
+      },
+      'not an object', // Non-object input
+      null, // Falsy input
+    ];
+
+    const expectedOutput = [
+      {
+        x: '2023-08-18',
+        y: 42,
+        display_value: 'Forty-Two',
+        otherProperty: 'abc',
+      },
+      // Empty object for non-object input
+      // Empty object for falsy input
+    ];
+
+    const curatedData = getCuratedData(input);
+
+    expect(curatedData).toEqual(expectedOutput);
+  });
+});
+
+
