@@ -76,3 +76,93 @@ export class HttpClient {
 }
 
 export default new HttpClient();
+
+
+
+
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import { HttpClient } from '../api/HttpClient'; // Adjust the import path
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect'; // For better assertions
+
+describe('HttpClient', () => {
+  let axiosMock: MockAdapter;
+  let httpClientInstance: HttpClient;
+
+  beforeEach(() => {
+    axiosMock = new MockAdapter(axios);
+    httpClientInstance = new HttpClient(axios); // Inject the axios instance
+  });
+
+  afterEach(() => {
+    axiosMock.restore();
+  });
+
+  it('performs a GET request successfully', async () => {
+    axiosMock.onGet('/api/resource').reply(200, { message: 'GET success' });
+
+    const response = await httpClientInstance.get('/api/resource');
+
+    expect(response.data.message).toEqual('GET success');
+  });
+
+  it('handles GET request failure', async () => {
+    axiosMock.onGet('/api/resource').reply(500, { errorMessage: 'Server error' });
+
+    await expect(httpClientInstance.get('/api/resource')).rejects.toThrowError(
+      'Server error'
+    );
+  });
+
+  it('performs a POST request successfully', async () => {
+    const requestData = { data: 'Test data' };
+    axiosMock.onPost('/api/resource').reply(200, { message: 'POST success' });
+
+    const response = await httpClientInstance.post('/api/resource', requestData);
+
+    expect(response.data.message).toEqual('POST success');
+  });
+
+  it('handles POST request failure', async () => {
+    axiosMock.onPost('/api/resource').reply(500, { errorMessage: 'Server error' });
+
+    await expect(httpClientInstance.post('/api/resource', {})).rejects.toThrowError(
+      'Server error'
+    );
+  });
+
+  it('performs a PUT request successfully', async () => {
+    const requestData = { data: 'Updated data' };
+    axiosMock.onPut('/api/resource').reply(200, { message: 'PUT success' });
+
+    const response = await httpClientInstance.put('/api/resource', requestData);
+
+    expect(response.data.message).toEqual('PUT success');
+  });
+
+  it('handles PUT request failure', async () => {
+    axiosMock.onPut('/api/resource').reply(500, { errorMessage: 'Server error' });
+
+    await expect(httpClientInstance.put('/api/resource', {})).rejects.toThrowError(
+      'Server error'
+    );
+  });
+
+  it('performs a DELETE request successfully', async () => {
+    axiosMock.onDelete('/api/resource').reply(200, { message: 'DELETE success' });
+
+    const response = await httpClientInstance.delete('/api/resource');
+
+    expect(response.data.message).toEqual('DELETE success');
+  });
+
+  it('handles DELETE request failure', async () => {
+    axiosMock.onDelete('/api/resource').reply(500, { errorMessage: 'Server error' });
+
+    await expect(httpClientInstance.delete('/api/resource')).rejects.toThrowError(
+      'Server error'
+    );
+  });
+});
+
