@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxioInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import Logger from "../utils/logger";
 
@@ -39,8 +39,8 @@ function getErrorMessage(error: unknown) {
 
 export class HttpClient {
   private _httpClient;
-  constructor() {
-    this._httpClient = axios.create();
+  constructor(httpClient: AxioInstance) {
+     this._httpClient = httpClient;
   }
 
   private async _invokeHttpRequest<T>(method: HttpMethod, url: string, args?: object) {
@@ -75,14 +75,14 @@ export class HttpClient {
   }
 }
 
-export default new HttpClient();
+export default new HttpClient(axios);
 
 
 
 
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { HttpClient } from '../api/HttpClient'; // Adjust the import path
+import HttpClient from '../api/HttpClient'; // Adjust the import path
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect'; // For better assertions
 
@@ -165,4 +165,5 @@ describe('HttpClient', () => {
     );
   });
 });
+
 
