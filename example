@@ -1,6 +1,8 @@
 import unittest
 
 def get_metric_key_value_dict(metric_keys, metric_values):
+    if len(metric_keys) != len(metric_values):
+        raise ValueError("Number of keys and values must be the same")
     metric_key_value_dict = dict(zip(metric_keys, metric_values))
     return metric_key_value_dict
 
