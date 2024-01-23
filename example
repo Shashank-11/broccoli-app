@@ -1,0 +1,35 @@
+import unittest
+
+def get_metric_keys(brand_id, scan_iter_preview):
+    match_pattern = re.compile(fr"\d+::\d+::{brand_id}:.*")
+    metric_keys = [metric_id_key for metric_id_key in scan_iter_preview if match_pattern.match(metric_id_key)]
+    return metric_keys
+
+class TestGetMetricKeys(unittest.TestCase):
+
+    def test_get_metric_keys_matching_brand_id(self):
+        brand_id = 987564
+        scan_iter_preview = ["123::456::987564:metric1", "789::987::987564:metric2", "654::321::123456:metric3"]
+        expected_result = ["123::456::987564:metric1", "789::987::987564:metric2"]
+        self.assertEqual(get_metric_keys(brand_id, scan_iter_preview), expected_result)
+
+    def test_get_metric_keys_different_brand_id(self):
+        brand_id = 123456
+        scan_iter_preview = ["123::456::987564:metric1", "789::987::987564:metric2", "654::321::123456:metric3"]
+        expected_result = ["654::321::123456:metric3"]
+        self.assertEqual(get_metric_keys(brand_id, scan_iter_preview), expected_result)
+
+    def test_get_metric_keys_no_matching_keys(self):
+        brand_id = 111111
+        scan_iter_preview = ["123::456::987564:metric1", "789::987::987564:metric2", "654::321::123456:metric3"]
+        expected_result = []
+        self.assertEqual(get_metric_keys(brand_id, scan_iter_preview), expected_result)
+
+    def test_get_metric_keys_empty_input_list(self):
+        brand_id = 987564
+        scan_iter_preview = []
+        expected_result = []
+        self.assertEqual(get_metric_keys(brand_id, scan_iter_preview), expected_result)
+
+if __name__ == '__main__':
+    unittest.main()
