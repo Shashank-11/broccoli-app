@@ -35,3 +35,70 @@ class TestGetIndustryIds(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+
+
+def filter_metric_keys(metric_id_key_list, scan_iter_preview):
+    """
+    Filter metric keys based on the provided match_pattern.
+
+    Parameters:
+    - metric_id_key_list: List of metric keys to filter.
+    - scan_iter_preview: List of lists containing metric keys.
+
+    Returns:
+    - List of metric keys that match the specified pattern.
+    """
+    filtered_metric_keys = [
+        metric_id_key for metric_id_key in metric_id_key_list
+        if any(re.match(re.compile(fr"\d+::\d+::.*:{metric_id_key}:.*"), metric_id_key) for metric_id_key in scan_iter_preview)
+    ]
+    return filtered_metric_keys
+
+
+
+import unittest
+
+class TestFilterMetricKeys(unittest.TestCase):
+    def test_filter_metric_keys(self):
+        metric_id_key_list = ['key1', 'key2', 'key3']
+        scan_iter_preview = [
+            '1::1::some_prefix:key1:some_value',
+            '2::2::some_prefix:key2:another_value',
+            '3::3::some_prefix:key3:yet_another_value',
+            '4::4::some_prefix:not_matching_key:some_other_value'
+        ]
+
+        filtered_keys = filter_metric_keys(metric_id_key_list, scan_iter_preview)
+
+        self.assertEqual(filtered_keys, ['key1', 'key2', 'key3'])
+
+    def test_filter_metric_keys_empty_input(self):
+        metric_id_key_list = []
+        scan_iter_preview = [
+            '1::1::some_prefix:key1:some_value',
+            '2::2::some_prefix:key2:another_value',
+            '3::3::some_prefix:key3:yet_another_value',
+            '4::4::some_prefix:not_matching_key:some_other_value'
+        ]
+
+        filtered_keys = filter_metric_keys(metric_id_key_list, scan_iter_preview)
+
+        self.assertEqual(filtered_keys, [])
+
+    def test_filter_metric_keys_no_matches(self):
+        metric_id_key_list = ['key4', 'key5']
+        scan_iter_preview = [
+            '1::1::some_prefix:key1:some_value',
+            '2::2::some_prefix:key2:another_value',
+            '3::3::some_prefix:key3:yet_another_value',
+            '4::4::some_prefix:not_matching_key:some_other_value'
+        ]
+
+        filtered_keys = filter_metric_keys(metric_id_key_list, scan_iter_preview)
+
+        self.assertEqual(filtered_keys, [])
+
+if __name__ == '__main__':
+    unittest.main()
