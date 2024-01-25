@@ -1,104 +1,39 @@
+import re
 import unittest
 
-def get_industry_ids(data):
-    if "industries" in data:
-        return [industry["industry_id"] for industry in data["industries"]]
-    else:
-        return []
-
-class TestGetIndustryIds(unittest.TestCase):
-
-    def test_get_industry_ids_with_industries(self):
-        data = {
-            "industries": [
-                {"industry_id": "8736272892027377", "industry_name": "Local mass xcvv"},
-                {"industry_id": "8736272892027375", "industry_name": "Local mass xcvv"}
-            ]
-        }
-        expected_result = ["8736272892027377", "8736272892027375"]
-        self.assertEqual(get_industry_ids(data), expected_result)
-
-    def test_get_industry_ids_without_industries(self):
-        data = {"industries": []}
-        expected_result = []
-        self.assertEqual(get_industry_ids(data), expected_result)
-
-    def test_get_industry_ids_without_industries_key(self):
-        data = {"brand_id": "1234787", "brand_name": "Orton", "markets": [], "channels": []}
-        expected_result = []
-        self.assertEqual(get_industry_ids(data), expected_result)
-
-    def test_get_industry_ids_with_empty_data(self):
-        data = {}
-        expected_result = []
-        self.assertEqual(get_industry_ids(data), expected_result)
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-
-
-def filter_metric_keys(metric_id_key_list, scan_iter_preview):
-    """
-    Filter metric keys based on the provided match_pattern.
-
-    Parameters:
-    - metric_id_key_list: List of metric keys to filter.
-    - scan_iter_preview: List of lists containing metric keys.
-
-    Returns:
-    - List of metric keys that match the specified pattern.
-    """
-    filtered_metric_keys = [
-        metric_id_key for metric_id_key in metric_id_key_list
-        if any(re.match(re.compile(fr"\d+::\d+::.*:{metric_id_key}:.*"), metric_id_key) for metric_id_key in scan_iter_preview)
-    ]
-    return filtered_metric_keys
-
-
-
-import unittest
+def filter_metric_keys(metric_id_keys, scan_iter_preview):
+    filtered_keys = [key for key in scan_iter_preview if any(re.match(fr"\d+::\d+::.*:{re.escape(metric_key)}:.*", key) for metric_key in metric_id_keys)]
+    return filtered_keys
 
 class TestFilterMetricKeys(unittest.TestCase):
     def test_filter_metric_keys(self):
-        metric_id_key_list = ['key1', 'key2', 'key3']
-        scan_iter_preview = [
-            '1::1::some_prefix:key1:some_value',
-            '2::2::some_prefix:key2:another_value',
-            '3::3::some_prefix:key3:yet_another_value',
-            '4::4::some_prefix:not_matching_key:some_other_value'
-        ]
+        metric_id_keys = ['key1', 'key2', 'key3']
+        scan_iter_preview = ['1::2::something:key1:something', '3::4::something:key2:something', '5::6::something:other_key:something']
 
-        filtered_keys = filter_metric_keys(metric_id_key_list, scan_iter_preview)
+        result = filter_metric_keys(metric_id_keys, scan_iter_preview)
 
-        self.assertEqual(filtered_keys, ['key1', 'key2', 'key3'])
+        # Assert that the result is as expected
+        self.assertEqual(result, ['1::2::something:key1:something', '3::4::something:key2:something'])
 
     def test_filter_metric_keys_empty_input(self):
-        metric_id_key_list = []
-        scan_iter_preview = [
-            '1::1::some_prefix:key1:some_value',
-            '2::2::some_prefix:key2:another_value',
-            '3::3::some_prefix:key3:yet_another_value',
-            '4::4::some_prefix:not_matching_key:some_other_value'
-        ]
+        # Test with empty input lists
+        metric_id_keys = []
+        scan_iter_preview = []
 
-        filtered_keys = filter_metric_keys(metric_id_key_list, scan_iter_preview)
+        result = filter_metric_keys(metric_id_keys, scan_iter_preview)
 
-        self.assertEqual(filtered_keys, [])
+        # Assert that the result is an empty list
+        self.assertEqual(result, [])
 
     def test_filter_metric_keys_no_matches(self):
-        metric_id_key_list = ['key4', 'key5']
-        scan_iter_preview = [
-            '1::1::some_prefix:key1:some_value',
-            '2::2::some_prefix:key2:another_value',
-            '3::3::some_prefix:key3:yet_another_value',
-            '4::4::some_prefix:not_matching_key:some_other_value'
-        ]
+        # Test with no matches in the scan_iter_preview
+        metric_id_keys = ['key1', 'key2', 'key3']
+        scan_iter_preview = ['1::2::something:other_key:something', '3::4::something:another_key:something']
 
-        filtered_keys = filter_metric_keys(metric_id_key_list, scan_iter_preview)
+        result = filter_metric_keys(metric_id_keys, scan_iter_preview)
 
-        self.assertEqual(filtered_keys, [])
+        # Assert that the result is an empty list
+        self.assertEqual(result, [])
 
 if __name__ == '__main__':
     unittest.main()
