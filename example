@@ -1,1 +1,43 @@
 
+def extract_ids_combined(global_item):
+    industry_ids = [industry["industry_id"] for industry in global_item.get("industries", [])]
+    market_ids = [market["market_id"] for market in global_item.get("markets", [])]
+    
+    combined_ids = industry_ids + market_ids
+    
+    return combined_ids
+
+# Example usage:
+combined_ids = extract_ids_combined(global_item)
+print("Combined IDs:", combined_ids)
+
+
+
+class TestExtractIdsCombined(unittest.TestCase):
+    def setUp(self):
+        self.global_item = {
+            "brand_id": "1234787",
+            "brand_name": "Orton",
+            "markets": [
+                {"market_id": "8736272892027371", "market_name": "Local mass xcvv"},
+                {"market_id": "8736272892027373", "market_name": "Local mass xcvv"}
+            ],
+            "industries": [
+                {"industry_id": "8736272892027377", "industry_name": "Local mass xcvv"},
+                {"industry_id": "8736272892027375", "industry_name": "Local mass xcvv"}
+            ],
+            "channels": []
+        }
+
+    def test_extract_ids_combined(self):
+        combined_ids = extract_ids_combined(self.global_item)
+        expected_ids = [
+            "8736272892027377",
+            "8736272892027375",
+            "8736272892027371",
+            "8736272892027373"
+        ]
+        self.assertEqual(sorted(combined_ids), sorted(expected_ids))
+
+if __name__ == '__main__':
+    unittest.main()
