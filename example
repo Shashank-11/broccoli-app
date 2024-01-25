@@ -1,1 +1,37 @@
+import unittest
 
+def get_industry_ids(data):
+    if "industries" in data:
+        return [industry["industry_id"] for industry in data["industries"]]
+    else:
+        return []
+
+class TestGetIndustryIds(unittest.TestCase):
+
+    def test_get_industry_ids_with_industries(self):
+        data = {
+            "industries": [
+                {"industry_id": "8736272892027377", "industry_name": "Local mass xcvv"},
+                {"industry_id": "8736272892027375", "industry_name": "Local mass xcvv"}
+            ]
+        }
+        expected_result = ["8736272892027377", "8736272892027375"]
+        self.assertEqual(get_industry_ids(data), expected_result)
+
+    def test_get_industry_ids_without_industries(self):
+        data = {"industries": []}
+        expected_result = []
+        self.assertEqual(get_industry_ids(data), expected_result)
+
+    def test_get_industry_ids_without_industries_key(self):
+        data = {"brand_id": "1234787", "brand_name": "Orton", "markets": [], "channels": []}
+        expected_result = []
+        self.assertEqual(get_industry_ids(data), expected_result)
+
+    def test_get_industry_ids_with_empty_data(self):
+        data = {}
+        expected_result = []
+        self.assertEqual(get_industry_ids(data), expected_result)
+
+if __name__ == '__main__':
+    unittest.main()
